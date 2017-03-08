@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>遥感处理</title>
+    <!--
+    主要做前端的步骤大概如下：
+    ①目标要做的效果
+    ②需要什么元素
+    ③需要的动作并且是否要响应开发
+    -----------------------------
+    文件头、文件正文、文件伪标题三部分构成。
+    
+    
+    -->
+
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="https://js.arcgis.com/4.2/esri/css/main.css">
+    <script src="https://js.arcgis.com/4.2/"></script>
+    <style>
+        html,
+        body {
+            background-color: #454d58;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+        
+        #viewMap {
+            padding: 0;
+            margin: 0;
+            height: fixed;
+            width: 100%;
+        }
+        
+        .header {
+            width: 100%;
+            height: auto;
+            position: fixed;
+            z-index: 100;
+            background: #1974a9;
+            border-top: 5px solid #363636;
+            box-shadow: 0 0 3px #333;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        
+        div {
+            display: block;
+        }
+        
+        .header_in {
+            width: 100%;
+            height: auto;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .header_center {
+            width: 100%;
+            max-width: 1280px;
+            max-height: 1280px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .logo {
+            float: left;
+            overflow: hidden;
+            max-width: 20%;
+            max-height: 78px;
+        }
+        
+        img {
+            border: none;
+            max-width: 100%;
+            height: auto
+        }
+        
+        #header_pic_nav {
+            float: right;
+            height: 78px;
+            width: auto;
+            max-width: 79%;
+            position: relative;
+            z-index: 1;
+        }
+        
+        #header_pic_nav li {
+            display: block;
+            float: left;
+            margin: 20px 10px 0 10px;
+            position: relative;
+            z-index: 10;
+            -webkit-transition: all 0.8s;
+        }
+        
+        li,
+        ul,
+        ol {
+            list-style: none;
+        }
+        
+        .footer {
+            height: auto;
+            border-top: solid 1px #3c3c3c;
+            position: relative;
+            z-index: 10;
+            background: url("/img/ba.png");
+        }
+        
+        .footer_in {
+            overflow: hidden;
+            height: auto;
+            margin: 0 auto;
+            overflow: hidden;
+            padding: 10px;
+            position: relative;
+            width: 100%;
+            max-width: 1280px;
+            z-index: 1;
+        }
+        
+        .footer,
+        .footer_bottom {
+            width: 100%;
+            float: left;
+            overflow: hidden;
+        }
+        
+        .footer_bottom_link li a,
+        #footer_bottom_link p {
+            font-size: 12px;
+            color: #fff;
+            margin-top: 10px;
+            float: left;
+            display: block;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .footer_bottom_link li a,
+        #footer_bottom_link p a {
+            font-size: 12px;
+            color: #fff;
+        }
+        
+        .contes {
+            font-size: 12px;
+            color: #fff;
+        }
+        
+        .footer_in_box {
+            height: 175px;
+            float: left;
+            margin: 10px 1.1% 0.0;
+            overflow: hidden;
+            text-align: left;
+        }
+        
+        .footer_in_box b {
+            font-size: 16px;
+            color: #fff;
+            display: none;
+            width: 100%;
+            float: left;
+            margin: 5px 0 0;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #3c3c3c;
+            font-weight: normal;
+        }
+        
+        .footer_about {
+            padding: 5px 3% 2% 0;
+            width: 26%;
+        }
+        
+        .about_pic {
+            float: left;
+            display: block;
+            width: 88px;
+            margin-top: 10px;
+            font-size: 0;
+            padding: 5px;
+        }
+        
+        .about_text {
+            float: left;
+            font-size: 12px;
+            color: #dbdbdb;
+            margin-top: 10px;
+            display: block;
+            width: 192px;
+        }
+        
+        p {
+            -webkit-margin-before: 1em;
+            -webkit-margin-after: 1em;
+            -webkit-margin-start: 0px;
+            -webkit-margin-start: 0px;
+        }
+        
+        .footer_contact {
+            padding: 5px 3% 2% 0;
+            width: 27%;
+        }
+        
+        .footer_linkss {
+            padding: 5px 0 2% 0;
+            width: 32%;
+        }
+        
+        #footer_bottom_link {
+            display: block;
+            width: 100%;
+            float: left;
+            text-align: center;
+            border-top: solid 1px #3c3c3c;
+            padding: 10px 0;
+        }
+        
+        .footer_in {
+            height: auto;
+            margin: 0 auto;
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .footer_bottom {
+            width: 100%;
+            float: left;
+            overflow: hidden;
+        }
+        
+        .contact_text_p {
+            font-size: 14px;
+            color: #FFF;
+            display: block;
+            width: 362px;
+            float: left;
+            margin-top: 10px;
+            padding-left: 30px;
+            background: no-repeat 0 -1041px url("/img/Sprites.png");
+        }
+        
+        .content {
+            width: auto;
+            margin: 0 auto;
+            padding: 0 60px 0 60px;
+            overflow: hidden;
+            height: 100%;
+        }
+        
+        #header_pic_nav li p {
+            font-size: 8px;
+            color: #1993ba;
+            text-transform: uppercase;
+        }
+        
+        #header_pic_nav li .nave_spaen div,
+        #header_pic_nav li p {
+            display: block;
+            width: 100%;
+        }
+        
+        #header_pic_nav li .nave_spaen div {
+            font-size: 14px;
+            color: #333;
+            font-weight: normal;
+            line-height: 17px;
+        }
+        
+        a {
+            text-decoration: none;
+        }
+        
+        #header_pic_nav li .sub_menu {
+            position: absolute;
+            top: 68px;
+            height: auto;
+            background: #fff;
+            width: 209px;
+            z-index: 10;
+            border-radius: 10px;
+            border: 1px solid #f4f4f4;
+            display: none;
+        }
+        
+        .imap {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            margin: 0 auto;
+            font-family: "微软雅黑";
+            position: absolute;
+            left: -1px;
+        }
+        
+        .menu_left {
+            position: absolute;
+            top: 80px;
+            height: 100%;
+            background-color: white;
+            width: 340px;
+            z-index: 10;
+            left: -340px;
+            border-radius: 10px;
+            /*            //display: none;*/
+            float: left;
+            bottom: fixed;
+            overflow: hidden;
+            overflow-y: auto;
+            overflow-x: auto;
+        }
+        
+        .menu_left_icon {
+            border-radius: 5px;
+            top: 50%;
+            width: 30px;
+            height: 30px;
+            left: 1px;
+            color: aqua;
+            float: left;
+            z-index: 10;
+            position: absolute;
+            background: url("/img/menu_tool_left.png");
+        }
+        
+        .menu_left_header {
+            background: url("/img/cumt.jpg");
+            max-width: 100%;
+            max-height: 100%;
+            overflow: hidden;
+        }
+        
+        .panel-group .panel {
+            margin-bottom: 0;
+            overflow: hidden;
+            border-radius: 4px;
+        }
+        
+        .panel-group .panel+.panel {
+            margin-top: 5px;
+        }
+        
+        .panel-group .panel-heading {
+            border-bottom: 0;
+        }
+        
+        .panel-group .panel-heading+.panel-collapse .panel-body {
+            border-top: 1px solid #dddddd;
+        }
+        
+        .panel-group .panel-footer {
+            border-top: 0;
+        }
+        
+        .panel-group .panel-footer+.panel-collapse .panel-body {
+            border-bottom: 1px solid #dddddd;
+        }
+        
+        .panel-default {
+            border-color: #dddddd;
+        }
+        
+        .panel-default>.panel-heading {
+            color: #333333;
+            background-color: #f5f5f5;
+            border-color: #dddddd;
+        }
+        
+        .panel-default>.panel-heading+.panel-collapse .panel-body {
+            border-top-color: #dddddd;
+        }
+        
+        .panel-default>.panel-footer+.panel-collapse .panel-body {
+            border-bottom-color: #dddddd;
+        }
+        
+        .panel-heading+.list-group .list-group-item:first-child {
+            border-top-width: 0;
+        }
+        
+        .panel-heading {
+            padding: 10px 15px;
+            border-bottom: 1px solid transparent;
+            border-top-right-radius: 3px;
+            border-top-left-radius: 3px;
+        }
+        
+        .panel-title {
+            margin-top: 0;
+            margin-bottom: 0;
+            font-size: 16px;
+            color: inherit;
+        }
+        
+        .panel-title>a {
+            color: inherit;
+        }
+        
+        .panel-group .panel-heading+.panel-collapse .panel-body {
+            border-top: 1px solid #dddddd;
+        }
+        
+        .panel-primary>.panel-heading+.panel-collapse .panel-body {
+            border-top-color: #428bca;
+        }
+        
+        .panel-success {
+            border-color: #d6e9c6;
+        }
+        
+        .panel-success>.panel-heading {
+            color: #3c763d;
+            background-color: #dff0d8;
+            border-color: #d6e9c6;
+        }
+        
+        .panel-success>.panel-heading+.panel-collapse .panel-body {
+            border-top-color: #d6e9c6;
+        }
+        
+        .panel-success>.panel-footer+.panel-collapse .panel-body {
+            border-bottom-color: #d6e9c6;
+        }
+        
+        .panel-info {
+            border-color: #bce8f1;
+        }
+        
+        .panel-info>.panel-heading {
+            color: #31708f;
+            background-color: #d9edf7;
+            border-color: #bce8f1;
+        }
+        
+        .panel-info>.panel-heading+.panel-collapse .panel-body {
+            border-top-color: #bce8f1;
+        }
+        
+        .panel-info>.panel-footer+.panel-collapse .panel-body {
+            border-bottom-color: #bce8f1;
+        }
+        
+        .panel-warning {
+            border-color: #faebcc;
+        }
+        
+        .panel-warning>.panel-heading {
+            color: #8a6d3b;
+            background-color: #fcf8e3;
+            border-color: #faebcc;
+        }
+        
+        .panel-warning>.panel-heading+.panel-collapse .panel-body {
+            border-top-color: #faebcc;
+        }
+        
+        .panel-warning>.panel-footer+.panel-collapse .panel-body {
+            border-bottom-color: #faebcc;
+        }
+    </style>
+    <!--map-->
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=5k8zNbDIiMnQ2guB5w27T23BwH9S1mMa"></script>
+    <script type="text/javascript">
+    </script>
+</head>
+
+<body class="home">
+    <div class="header">
+        <div class="header_in">
+            <div class="header_center">
+                <h1 class="logo">
+                    <a href="https:www.cumt.com" title="CUMT">
+                        <img src="/img/cumtq.jpg" alt="CUMT">
+                    </a>
+                </h1>
+                <div id="header_pic_nav" class="hide_icon">
+                    <div id="header_pic_menu" class="header_menu_ul">
+                        <li class="menu_item">
+                            <a href="">
+                                <div class="nave_spaen">
+                                    <div style="top:0px">首页</div>
+                                    <p>index</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="menu_item">
+                            <a href="javascript:void(0)">
+                                <div class="nave_spaen">
+                                    <div id="pre" style="top:0px;">图像预处理</div>
+                                    <p>Process</p>
+                                </div>
+                            </a>
+                            <ul id="show1" class="sub_menu" style="display:none">
+                                <li class="menu_item">
+                                    <div class="nave_spaen">
+                                        <div style="top:0px">图像校正</div>
+                                        <p>index</p>
+                                    </div>
+                                </li>
+                                <li class="menu_item">
+                                    <div class="nave_spaen">
+                                        <div style="top:0px">图像裁剪</div>
+                                        <p>index</p>
+                                    </div>
+                                </li>
+                                <li class="menu_item">
+                                    <div class="nave_spaen">
+                                        <div style="top:0px">图像增强</div>
+                                        <p>index</p>
+                                    </div>
+                                </li>
+                                <li class="menu_item">
+                                    <div class="nave_spaen">
+                                        <div style="top:0px">图像重采样</div>
+                                        <p>index</p>
+                                    </div>
+                                </li>
+                                <li class="menu_item">
+                                    <div class="nave_spaen">
+                                        <div style="top:0px">图像分类</div>
+                                        <p>index</p>
+                                    </div>
+                                </li>
+                                <li class="menu_item">
+                                    <div class="nave_spaen">
+                                        <div style="top:0px">掩膜应用</div>
+                                        <p>index</p>
+                                    </div>
+                                </li>
+                                <li class="menu_item">
+                                    <div class="nave_spaen">
+                                        <div style="top:0px">主成分变换</div>
+                                        <p>index</p>
+                                    </div>
+                                </li>
+                                <li class="menu_item">
+                                    <div class="nave_spaen">
+                                        <div style="top:0px">栅格计算器</div>
+                                        <p>index</p>
+                                    </div>
+                                </li>
+                                <li class="menu_item">
+                                    <div class="nave_spaen">
+                                        <div style="top:0px">辐射亮度</div>
+                                        <p>index</p>
+                                    </div>
+                                </li>
+                                <li class="menu_item">
+                                    <div class="nave_spaen">
+                                        <div style="top:0px">大气纠正</div>
+                                        <p>index</p>
+                                    </div>
+                                </li>
+                                <li class="menu_item">
+                                    <div class="nave_spaen">
+                                        <div style="top:0px">表现反射率</div>
+                                        <p>index</p>
+                                    </div>
+                                </li>
+                                <li class="menu_item">
+                                    <div class="nave_spaen">
+                                        <div style="top:0px">地理重定位</div>
+                                        <p>index</p>
+                                    </div>
+                                </li>
+                                <li class="menu_item">
+                                    <div class="nave_spaen">
+                                        <div style="top:0px">蝴蝶效应去除</div>
+                                        <p>index</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="menu_item">
+                            <a id="veg" href="javascript:void(0)">
+                                <div class="nave_spaen">
+                                    <div style="top:0px">植被监测</div>
+                                    <p>View</p>
+                                </div>
+                            </a>
+                            <ul id="veg_show" class="sub_menu" style="display:none">
+                                <li class="menu_item">
+                                    <div class="nave_spaen">
+                                        <div style="top:0px">植被指数</div>
+                                        <p>index</p>
+                                    </div>
+                                </li>
+                                <li class="menu_item">
+                                    <div class="nave_spaen">
+                                        <div style="top:0px">植被覆盖率</div>
+                                        <p>index</p>
+                                    </div>
+                                </li>
+                                <li class="menu_item">
+                                    <div class="nave_spaen">
+                                        <div style="top:0px">植被动态监测</div>
+                                        <p>index</p>
+                                    </div>
+                                </li>
+                                <li class="menu_item">
+                                    <div class="nave_spaen">
+                                        <div style="top:0px">覆盖度分级</div>
+                                        <p>index</p>
+                                    </div>
+                                </li>
+                                <li class="menu_item">
+                                    <div class="nave_spaen">
+                                        <div style="top:0px">植被覆盖统计</div>
+                                        <p>index</p>
+                                    </div>
+                                </li>
+                                <li class="menu_item">
+                                    <div class="nave_spaen">
+                                        <div style="top:0px">植被生态环境综合指数</div>
+                                        <p>index</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="menu_item">
+                            <a id='water' href="javascript:void(0);">
+                                <div class="nave_spaen">
+                                    <div style="top:0px">水体监测</div>
+                                    <p>Products</p>
+                                </div>
+                            </a>
+                            <ul id="water_show" class="sub_menu" style="display:none">
+                                <li class="menu_item">
+                                    <div class="nave_spaen">
+                                        <div style="top:0px">水体指数</div>
+                                        <p>index</p>
+                                    </div>
+                                </li>
+                                <li class="menu_item">
+                                    <div class="nave_spaen">
+                                        <div style="top:0px">水体面积</div>
+                                        <p>index</p>
+                                    </div>
+                                </li>
+                                <li class="menu_item">
+                                    <div class="nave_spaen">
+                                        <div style="top:0px">水质监测</div>
+                                        <p>index</p>
+                                    </div>
+                                </li>
+                                <li class="menu_item">
+                                    <div class="nave_spaen">
+                                        <div style="top:0px">水体评价</div>
+                                        <p>index</p>
+                                    </div>
+                                </li>
+                                <li class="menu_item">
+                                    <div class="nave_spaen">
+                                        <div style="top:0px">溶解氧</div>
+                                        <p>index</p>
+                                    </div>
+                                </li>
+                                <li class="menu_item">
+                                    <div class="nave_spaen">
+                                        <div style="top:0px">KNO3</div>
+                                        <p>index</p>
+                                    </div>
+                                </li>
+                                <li class="menu_item">
+                                    <div class="nave_spaen">
+                                        <div style="top:0px">日需氧量</div>
+                                        <p>index</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="menu_item">
+                            <a href="javascript:void(0);">
+                                <div class="nave_spaen">
+                                    <div style="top:0px">大气监测</div>
+                                    <p>AskCom</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="menu_item">
+                            <a href="javascript:void(0);">
+                                <div class="nave_spaen">
+                                    <div style="top:0px">热岛监测</div>
+                                    <p>Download</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="menu_item">
+                            <a id='nature' href="javascript:void(0);">
+                                <div class="nave_spaen">
+                                    <div style="top:0px">生态综合</div>
+                                    <p>Help</p>
+                                </div>
+                            </a>
+                            <ul id="nature_show" class="sub_menu" style="display:none">
+                                <li class="menu_item">
+                                    <div class="nave_spaen">
+                                        <div style="top:0px">生态环境综合指数</div>
+                                        <p>index</p>
+                                    </div>
+                                </li>
+                                <li class="menu_item">
+                                    <div class="nave_spaen">
+                                        <div style="top:0px">生态环境动态数据</div>
+                                        <p>index</p>
+                                    </div>
+                                </li>
+                                <li class="menu_item">
+                                    <div class="nave_spaen">
+                                        <div style="top:0px">生态环境综合评价</div>
+                                        <p>index</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="menu_item">
+                            <a href="">
+                                <div class="nave_spaen">
+                                    <div style="top:0px">地图输出</div>
+                                    <p>Output</p>
+                                </div>
+                            </a>
+                        </li>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <div class="menu_left_icon">
+
+        </div>
+        <div class="menu_left">
+            <!--
+           当然可以也可以写成三种切换的方式，也可以动态生成啦，
+           这里的代码可以使用table进行搞事情。
+           -->
+            <div class="menu_left_header">
+                <!--主要写一点头分类等菜单-->
+
+            </div>
+            <div class="menu_left_content">
+                <div class="panel-group" id="accordion">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+					登陆模块
+				</a>
+                            </h4>
+                        </div>
+                        <div id="collapseOne" class="panel-collapse collapse in">
+                            <div class="panel-body">
+                                Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-success">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+					植被监测
+				</a>
+                            </h4>
+                        </div>
+                        <div id="collapseTwo" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+					水体监测
+				</a>
+                            </h4>
+                        </div>
+                        <div id="collapseThree" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-warning">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour">
+					土壤监测
+				</a>
+                            </h4>
+                        </div>
+                        <div id="collapseFour" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Magnam reprehenderit, voluptas. Suscipit saepe, eum itaque a dolor veritatis, omnis dolore quidem tenetur eligendi odit consectetur enim esse, non sapiente aut.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseFive">
+					大气监测
+				</a>
+                            </h4>
+                        </div>
+                        <div id="collapseFive" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-success">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseSix">
+					生态综合
+				</a>
+                            </h4>
+                        </div>
+                        <div id="collapseSix" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-warning">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseSeven">
+					制图出图
+				</a>
+                            </h4>
+                        </div>
+                        <div id="collapseSeven" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-success">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseEight">
+					后台管理
+				</a>
+                            </h4>
+                        </div>
+                        <div id="collapseEight" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--主要写一点功能性操作-->
+            </div>
+            <div class="menu_left_font">
+                <div style="width: 340px; height: 340px;" data-tagul-src="//cdn.tagul.com/json/iwde0efpnxmh" data-tagul-show-attribution></div>
+                <!--主要写一点分页等操作-->
+            </div>
+        </div>
+        <div id="viewMap" class="imap">
+
+        </div>
+    </div>
+    <div class="footer">
+        <div class="footer_in">
+            <div id="footer_in_box" class="footer_in_box demor footer_about" style="opacity:1;top:0px">
+                <a target="_blank" class="about_pic about_text" href><img src="/img/logo.jpg"></a>
+                <br><br>
+                <p class="about_text">中国矿业大学是一个具有十足人文气息和学术氛围的综合性大学。
+                </p>
+            </div>
+            <div id="footer_in_box" class="footer_in_box footer_contact" style="opacity:1;top:0px">
+                <p class="contes"> Follow us From at social media <br> 从社交媒体上关注我们 </p>
+                <a href target="_blank" class="about_pic">
+                    <img src="/img/qrcode.jpg" alt="cumt">
+                </a>
+                <p class="about_text">
+                    关注官方二维码、掌握更多最新实时消息
+                    <br> 也可以通过以下方式关注我们
+                </p>
+                <p class="about_text">
+                    <a href><img src="http://www.themepark.com.cn/demo/wp-content/themes/simplespace_free/images/weibo.png" alt=""></a>
+                    <a href><img src="http://www.themepark.com.cn/demo/wp-content/themes/simplespace_free/images/tengxunweibo.png" alt=""></a>
+                    <a href><img src="http://www.themepark.com.cn/demo/wp-content/themes/simplespace_free/images/baidu.png" alt=""></a>
+                </p>
+            </div>
+            <div id="footer_in_box" class="footer_in_box footer_linkss" style="opacity:1;top:0px">
+                <p class="about_text">联系我们 </p>
+                <p class="contact_text_p">联系电话:0516 -*******</p>
+                <p class="contact_text_p">联系邮箱：www.cumt.edu.cn</p>
+                <p class="contact_text_p"> 联系地址：江苏省徐州市大学路1号中国矿业大学南湖校区</p>
+            </div>
+            <div id="footer_bottom_link" class="footer_in" style="top:0;opacity:1">
+                <div class="footer_bottom_link">
+                    <ul style="display:none">
+                        <li><a href="#">关于我们</a></li>
+                        <li><a href="#">联系我们</a></li>
+                        <li><a href="#">工作机会</a></li>
+                        <li><a href="#">商务合作</a></li>
+                        <li><a href="#">法律声明</a></li>
+                    </ul>
+                    <p class="f_bq">
+                        版权所有 ©2017 中国矿业大学 |
+                        <a href="#" target="_blank" rel="nofollow"></a>
+                        | 技术支持：
+                        <a href="#" target="_blank" class="banquan"> | 技术支持：中国矿业大学</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    $.ajax({
+        url: "//cdn.tagul.com/tagul.min.js",
+        dataType: "script",
+        success: function() {
+            setTimeout(function() {
+                $(".tagul-attribution").css("display", "none");
+            }, 3000);
+        }
+    });
+
+    $(function() {
+        $(".esri-attribution__sources").css("display", "none");
+        $(".tagul-anchor canvas").click(function(parms) {
+            console.log(parms);
+            alert("hello world");
+        });
+        $("#pre").click(function() {
+            var s = $("#show1").is(":visible");
+            console.log(s);
+            if (s) {
+                $("#show1").fadeOut('slow');
+            } else {
+                $("#show1").slideDown('slow');
+            }
+        });
+        $("#veg").click(function() {
+            var w = $("#veg_show").is(":visible");
+            console.log(w);
+            if (w) {
+                $("#veg_show").fadeOut('slow');
+            } else {
+                $("#veg_show").slideDown('slow');
+            }
+        });
+        $("#water").click(function() {
+            var w = $("#water_show").is(":visible");
+            console.log(w);
+            if (w) {
+                $("#water_show").fadeOut('slow');
+            } else {
+                $("#water_show").slideDown('slow');
+            }
+        });
+        $("#nature").click(function() {
+            var w = $("#nature_show").is(":visible");
+            console.log(w);
+            if (w) {
+                $("#nature_show").fadeOut('slow');
+            } else {
+                $("#nature_show").slideDown('slow');
+            }
+        });
+        $(".menu_left_icon").click(function() {
+            var vis = $(".menu_left");
+            console.log(vis.css("left"));
+            if (vis.css("left") == "-340px") {
+                $(".menu_left_icon").animate({
+                    "left": "341px"
+                }, 200, function() {
+                    vis.animate({
+                        "left": "0px"
+                    }, 100);
+                    $("#viewMap").animate({
+                        "left": "341px"
+                    }, 200, function() {
+                        var wd = document.body.clientWidth;
+                        console.log(wd);
+                        var cc = wd - 340;
+                        $(this).css("width", cc + 'px');
+                    });
+                }).css("background-color", "green");
+            } else {
+                vis.animate({
+                    "left": "-340px"
+                }, 100, function() {
+                    $(".menu_left_icon").animate({
+                        "left": "1px"
+                    }, 100, function() {
+                        var pl = $("#viewMap").animate({
+                            "left": "-200px"
+                        }, 100, function() {
+                            var wd = document.body.clientWidth;
+                            var cc = wd + 340;
+                            $(this).css("width", cc + 'px');
+                        });
+                    }).css("background-color", "#fff");
+                });
+
+            }
+        });
+    });
+
+    /*
+    效果
+    */
+    var cc = ["#collapseFive", "#collapseSix", "#collapseSeven", "#collapseEight"];
+    for (i = 0; i < cc.length; i++) {
+        $(cc[i]).collapse({
+            toggle: true
+        });
+    }
+    $(function() {
+        $('#collapseFour').collapse({
+            toggle: true
+        })
+    });
+    $(function() {
+        $('#collapseTwo').collapse('show')
+    });
+    $(function() {
+        $('#collapseThree').collapse('toggle')
+    });
+    $(function() {
+        $('#collapseOne').collapse('hide')
+    });
+</script>
+<script type="text/javascript">
+    // 百度地图API功能
+    var map = new BMap.Map("allmap"); // 创建Map实例
+    map.centerAndZoom(new BMap.Point(116.404, 39.915), 11); // 初始化地图,设置中心点坐标和地图级别
+    map.addControl(new BMap.MapTypeControl()); //添加地图类型控件
+    map.setCurrentCity("北京"); // 设置地图显示的城市 此项是必须设置的
+    map.enableScrollWheelZoom(true); //开启鼠标滚轮缩放
+</script>
+<script>
+    require([
+        "esri/Map",
+        "esri/views/SceneView",
+        "dojo/domReady!"
+    ], function(Map, SceneView) {
+        var map = new Map({
+            basemap: 'satellite',
+            ground: "world-elevation"
+        });
+
+        var view = new SceneView({
+            container: "viewMap",
+            map: map
+        });
+    });
+</script>
+
+</html>

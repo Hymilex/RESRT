@@ -1,0 +1,114 @@
+/* LOADNSHO.RC -- Resource file for LOADNSHO
+   Victor Library for 32-bit Windows
+         Catenary Systems
+         470 Belleview
+         St Louis, MO 63119
+         (314)962-7833
+*/
+#include <windows.h>
+#include <vicdefs.h>
+#include "LOADNSHO.H"
+
+LOADNSHO ICON loadnsho.ico
+
+LOADNSHO MENU
+  BEGIN
+    POPUP  "&File"
+      BEGIN
+        MENUITEM "&Open...",      IDM_F_OPEN
+        MENUITEM "E&xit",         IDM_F_EXIT
+        MENUITEM  SEPARATOR
+        MENUITEM "&About LoadNSho...", IDM_F_ABOUT
+      END
+  END
+
+STRINGTABLE
+BEGIN
+/* NO_ERROR,          "" */
+   BAD_RANGE,         "Value(s) out of range"
+   NO_DIG,            "Error in receiving image"
+   BAD_DSK,           "Disk full, %s not written"
+   BAD_OPN,           "Cannot open %s"
+   BAD_FAC,           "Invalid Data"
+   BAD_TIFF,          "Unreadable TIF format: %s"
+   BAD_BPS,           "Unsupported TIF bits per sample"
+   BAD_CMP,           "Unsupported compression scheme"
+   BAD_CRT,           "Cannot create %s"
+   BAD_FTPE,          "Invalid filetype"
+   BAD_DIB,           "DIB is compressed and can not be processed"
+   VMODE_ERR,         "Invalid video mode"
+   BAD_MEM,           "Insufficient memory"
+   BAD_PIW,           "Unreadable PIW format: %s"
+   BAD_PCX,           "Unreadable PCX format: %s"
+   BAD_GIF,           "Unreadable GIF format: %s"
+   PRT_ERR,           "Printer error"
+   SCAN_ERR,          "Scanner error"
+   BAD_TGA,           "Unreadable Targa format: %s"
+   BAD_BPP,           "Image bits per pixel not supported by function"
+   BAD_BMP,           "Unreadable BMP format: %s"
+   BAD_JPEG,          "Unreadable JPG format: %s"
+   COM_ERR,           "Serial data reception error"
+   BAD_COM,           "COM port not initialized"
+   NO_DEV_DATA,       "No data from device"
+   TIMEOUT,           "Function timed out"
+   BAD_LOCK,          "Error in locking memory"
+   PRT_BUSY,          "Print function is busy"
+   BAD_IBUF,          "Invalid image buffer address"
+   TOO_CPLX,          "Group 4 image has too many color changes in a row"
+   ERR_BAD_PATH,      "Path not found: %s"
+   ERR_REG_CLASS,     "Error registering window class"
+   ERR_CRT_MANWIN,    "Could not create main window"
+   ERR_DEFAULT,       "Error encountered"
+END
+
+IDD_ABOUTBOX DIALOG 22, 16, 164, 136
+STYLE DS_MODALFRAME | WS_CAPTION | WS_SYSMENU
+CAPTION "About LoadNSho"
+FONT 8, "Helv"
+BEGIN
+   CTEXT "",                         IDC_VAL1, 34,  4,112, 8
+   CTEXT "A simple program illustrating"   -1, 34, 16,112, 8
+   CTEXT "Victor Library for 32-bit Windows" -1, 30, 28,120, 8
+   CTEXT "Catenary Systems Inc"            -1, 30, 52,120, 8
+   CTEXT "470 Belleview"                   -1, 30, 64,120, 8
+   CTEXT "St Louis MO 63119"               -1, 30, 76,120, 8
+   CTEXT "(314) 962-7833"                  -1, 30, 88,120, 8
+   CTEXT "",                         IDC_VAL2, 30,100,120, 8
+   ICON "LOADNSHO" -1, 10, 5, 18, 20
+   DEFPUSHBUTTON "&OK" IDOK, 64, 116, 38, 14, WS_GROUP
+END
+
+// The version information resource
+VS_VERSION_INFO	VERSIONINFO
+FILEVERSION			4, 5
+PRODUCTVERSION		4, 0
+FILEFLAGSMASK		VS_FFI_FILEFLAGSMASK
+FILEFLAGS		0
+FILEOS				VOS__WINDOWS32
+FILETYPE				VFT_APP
+FILESUBTYPE			VFT2_UNKNOWN
+BEGIN
+	BLOCK "VarFileInfo"
+	BEGIN
+		VALUE "Translation", 0x409, 1252
+	END
+
+	BLOCK "StringFileInfo"
+	BEGIN
+		BLOCK "040904E4"
+		BEGIN
+//			VALUE "Comments",         "\0"
+			VALUE "CompanyName",      "Catenary Systems\0"
+			VALUE "FileDescription",  "Victor 32-bit Simple Demo Program\0"
+			VALUE "FileVersion",      "4.05\0"
+			VALUE "InternalName",     "LOADNSHO.EXE\0"
+			VALUE "LegalCopyright",   "Copyright \251 1989-1995 Catenary Systems, Inc\0"
+//			VALUE "LegalTrademarks",  "\0"
+			VALUE "OriginalFilename", "LOADNSHO.EXE\0"
+//			VALUE "PrivateBuild",     "\0"
+			VALUE "ProductName",      "Victor Image Processing Library\0"
+			VALUE "ProductVersion",   "4.05\0"
+//			VALUE "SpecialBuild",     "\0"
+		END
+	END
+END
